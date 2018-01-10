@@ -116,8 +116,15 @@ def round_corners_of_all_images(directory = new_directory):
         new_image.save(new_image_filename)    
 def frame_all_images(color, wide):
     image_list, file_list = get_images(new_directory)
-    basketball = new_directory + "\\basketball.png"
-    drawing_layer = PIL.ImageDraw.open(basketball)
-    drawing_layer.polygon([(0,radius),(width,radius),
-                            (width,height-radius),(0,height-radius)],
-                            fill=(127,0,127,255))
+    for n in range(len(file_list)):
+        if(file_list[n] == 'basketball.JPG'):
+            basketball = image_list[n]
+    width, height = basketball.size
+    xy = [(0,0), (width,height)]
+    blank_mask = PIL.Image.new('RGBA', (width,height), (color[0],color[1],color[2],color[3]))
+    drawing_layer = PIL.ImageDraw.Draw(blank_mask)
+    basketball.rectangle(xy, fill=None, outline=(color[0],color[1],color[2],color[3]))
+    result = PIL.Image.new('RGBA', basketball.size, (0,0,0,0))
+    result.paste(basketball, (0,0), mask=blank_mask)
+    new_image_filename = os.path.join(new_directory, 'test.png')
+    result.save(new_image_filename)
