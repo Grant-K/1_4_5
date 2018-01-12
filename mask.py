@@ -132,20 +132,25 @@ def frame_one_image(color, wide, save_directory = current_directory):
         pass
     new_image_filename = os.path.join(save_directory, filename + '.png')
     result.save(new_image_filename)  
-def swiss_cheese_image(color,save_directory = current_directory):
+def swiss_cheese_image(save_directory = current_directory):
     image_list, file_list = get_images(new_directory)
     for n in range(len(file_list)):
         if(file_list[n] == 'basketball.JPG'):
            filename, filetype = os.path.splitext(file_list[n])
            image = image_list[n]
     width, height = image.size
-    radius = image.size/10
+    height1 = [height, height*2, height*2+height, height*2+height*2, height*2+height*2+height] 
+    width1 = [width, width*2, width*2+width, width*2+width*2, width*2+width*2+width] 
     show_mask = PIL.Image.new('RGBA', (width, height), (0,0,0,0))
     drawing_layer = PIL.ImageDraw.Draw(show_mask)
-    drawing_layer.ellipse((radius,radius, 2, 2), fill=(0,127,127,255)) #top left
-    result = PIL.Image.new('RGBA', image.size, (color[0],color[1],color[2],255))
+    for x in range(0, 4):
+        for y in range(0,4):
+            drawing_layer.ellipse([width1[x], height1[y], width1[x], height1[y]], fill = (0,0,0,255), outline=None)
+    result = PIL.Image.new('RGBA', image.size, (255,255,255,255))
     result.paste(image, (0,0), mask=show_mask)
     try:
         os.mkdir(save_directory)
     except OSError:
         pass
+    new_image_filename = os.path.join(save_directory, filename + '.png')
+    result.save(new_image_filename) 
