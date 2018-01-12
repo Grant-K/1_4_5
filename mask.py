@@ -114,7 +114,7 @@ def round_corners_of_all_images(directory = new_directory):
         # Save the altered image, suing PNG to retain transparency
         new_image_filename = os.path.join(new_directory, filename + '.png')
         new_image.save(new_image_filename)    
-def frame_all_images(color, wide, save_directory = current_directory):
+def frame_one_image(color, wide, save_directory = current_directory):
     image_list, file_list = get_images(new_directory)
     for n in range(len(file_list)):
         if(file_list[n] == 'basketball.JPG'):
@@ -132,3 +132,20 @@ def frame_all_images(color, wide, save_directory = current_directory):
         pass
     new_image_filename = os.path.join(save_directory, filename + '.png')
     result.save(new_image_filename)  
+def swiss_cheese_image(color,save_directory = current_directory):
+    image_list, file_list = get_images(new_directory)
+    for n in range(len(file_list)):
+        if(file_list[n] == 'basketball.JPG'):
+           filename, filetype = os.path.splitext(file_list[n])
+           image = image_list[n]
+    width, height = image.size
+    radius = image.size/10
+    show_mask = PIL.Image.new('RGBA', (width, height), (0,0,0,0))
+    drawing_layer = PIL.ImageDraw.Draw(show_mask)
+    drawing_layer.ellipse((radius,radius, 2, 2), fill=(0,127,127,255)) #top left
+    result = PIL.Image.new('RGBA', image.size, (color[0],color[1],color[2],255))
+    result.paste(image, (0,0), mask=show_mask)
+    try:
+        os.mkdir(save_directory)
+    except OSError:
+        pass
