@@ -114,7 +114,7 @@ def round_corners_of_all_images(directory = new_directory):
         # Save the altered image, suing PNG to retain transparency
         new_image_filename = os.path.join(new_directory, filename + '.png')
         new_image.save(new_image_filename)    
-def frame_one_image(color, wide, image, save_directory = current_directory):
+def frame_one_image(color, wide, image, filename, filetype, save_directory = current_directory):
     width, height = image.size
     show_mask = PIL.Image.new('RGBA', (width, height), (0,0,0,0))
     drawing_layer = PIL.ImageDraw.Draw(show_mask)
@@ -128,7 +128,6 @@ def frame_one_image(color, wide, image, save_directory = current_directory):
     new_image_filename = os.path.join(save_directory, filename + '.png')
     result.save(new_image_filename)  
 def swiss_cheese_one_image(save_directory = current_directory):
-    image_list, file_list = get_images(new_directory)
     for n in range(len(file_list)):
         if(file_list[n] == 'basketball.JPG'):
            filename, filetype = os.path.splitext(file_list[n])
@@ -155,8 +154,8 @@ def swiss_cheese_one_image(save_directory = current_directory):
     new_image_filename = os.path.join(save_directory, filename + '.png')
     result.save(new_image_filename) 
 def frame_all_images(color, wide, directory = current_directory):
+     image_list, file_list = get_images(new_directory)
      for n in range(len(file_list)):
-        if(file_list[n] == 'basketball.JPG'):
-           filename, filetype = os.path.splitext(file_list[n])
-           image = image_list[n]
-           frame_one_image(color, wide, directory, image)
+       filename, filetype = os.path.splitext(file_list[n])
+       image = image_list[n]
+       frame_one_image(color, wide, image, filename, filetype, directory)
