@@ -127,23 +127,16 @@ def frame_one_image(color, wide, image, filename, filetype, save_directory = cur
         pass
     new_image_filename = os.path.join(save_directory, filename + '.png')
     result.save(new_image_filename)  
-def swiss_cheese_one_image(save_directory = current_directory):
-    for n in range(len(file_list)):
-        if(file_list[n] == 'basketball.JPG'):
-           filename, filetype = os.path.splitext(file_list[n])
-           image = image_list[n]
+def swiss_cheese_one_image(image, filename, filetype, save_directory = current_directory):
     width, height = image.size
-    print(image.size)
     width = width/10
     height = height/10
-    print(width,height)
     height1 = [0, height*2, height*4, height*6, height*8, height*10] 
     width1 = [0, width*2, width*4, width*6, width*8, width*10] 
     show_mask = PIL.Image.new('RGBA', (image.size), (0,0,0,255))
     drawing_layer = PIL.ImageDraw.Draw(show_mask)
     for x in range(0,5):
         for y in range(0,5):
-            print(width1[x], height1[y])
             drawing_layer.ellipse([width1[x], height1[y], width1[x+1], height1[y+1]], fill = (0,0,0,0), outline=None)
     result = PIL.Image.new('RGBA', image.size, (255,255,255,255))
     result.paste(image, (0,0), mask=show_mask)
@@ -159,3 +152,9 @@ def frame_all_images(color, wide, directory = current_directory):
        filename, filetype = os.path.splitext(file_list[n])
        image = image_list[n]
        frame_one_image(color, wide, image, filename, filetype, directory)
+def swiss_cheese_all_images(directory = current_directory):
+    image_list, file_list = get_images(new_directory)
+    for n in range(len(file_list)):
+       filename, filetype = os.path.splitext(file_list[n])
+       image = image_list[n]
+       swiss_cheese_one_image(image, filename, filetype, directory)
